@@ -9,14 +9,13 @@ interface TonConnectProviderProps {
 
 export function TonConnectProvider({ children }: TonConnectProviderProps) {
   // Use inline manifest configuration to avoid external URL dependency
-  const manifestUrl =
-    "https://raw.githubusercontent.com/ton-community/ton-connect-manifest/main/tonconnect-manifest.json"
+  const manifestUrl = "/tonconnect-manifest.json"
 
   return (
     <TonConnectUIProvider
       manifestUrl={manifestUrl}
       actionsConfiguration={{
-        twaReturnUrl: "https://t.me/tgbtc_request_bot",
+        twaReturnUrl: "https://t.me/tgBTCpayBot",
         skipRedirectToWallet: "never",
       }}
       uiPreferences={{
