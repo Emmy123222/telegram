@@ -22,8 +22,10 @@ export function useTonConnect() {
     setConnectionError(null)
 
     try {
-      // Clear any previous errors
-      setConnectionError(null)
+      // Check if TonConnectUI is properly initialized
+      if (!tonConnectUI) {
+        throw new Error("TON Connect UI not initialized")
+      }
 
       // Open the connection modal
       tonConnectUI.openModal()
@@ -43,9 +45,12 @@ export function useTonConnect() {
 
   const disconnect = useCallback(async () => {
     try {
+      if (!tonConnectUI) {
+        throw new Error("TON Connect UI not initialized")
+      }
+
       await tonConnectUI.disconnect()
       setConnectionError(null)
-      setIsConnecting(false)
       toast({
         title: "Wallet Disconnected",
         description: "Your wallet has been disconnected",
@@ -62,6 +67,8 @@ export function useTonConnect() {
 
   // Handle connection status changes
   useEffect(() => {
+    if (!tonConnectUI) return
+
     const unsubscribe = tonConnectUI.onStatusChange((walletInfo) => {
       setIsConnecting(false)
 
@@ -74,7 +81,6 @@ export function useTonConnect() {
         })
       } else {
         console.log("Wallet disconnected")
-        setConnectionError(null)
       }
     })
 
@@ -85,12 +91,13 @@ export function useTonConnect() {
 
   // Handle modal state changes
   useEffect(() => {
+    if (!tonConnectUI) return
+
     const unsubscribe = tonConnectUI.onModalStateChange((state) => {
-      if (state.status === "closed" && !connected && isConnecting) {
+      if (state.status === "closed" && !connected) {
         setIsConnecting(false)
         if (state.closeReason === "user-action") {
-          // Don't show error for user cancellation
-          console.log("Connection cancelled by user")
+          setConnectionError("Connection cancelled by user")
         }
       }
     })
@@ -98,35 +105,7 @@ export function useTonConnect() {
     return () => {
       unsubscribe()
     }
-  }, [tonConnectUI, connected, isConnecting])
-
-  // Handle connection errors
-  useEffect(() => {
-    const handleError = (error: any) => {
-      console.error("TON Connect error:", error)
-      setIsConnecting(false)
-
-      // Don't show manifest errors to users
-      if (error?.message?.includes("manifest") || error?.message?.includes("404")) {
-        console.warn("Manifest error (handled internally):", error)
-        return
-      }
-
-      setConnectionError(error?.message || "Connection failed")
-    }
-
-    // Listen for any unhandled errors
-    window.addEventListener("unhandledrejection", (event) => {
-      if (event.reason?.message?.includes("tonconnect") || event.reason?.message?.includes("manifest")) {
-        event.preventDefault() // Prevent console error
-        handleError(event.reason)
-      }
-    })
-
-    return () => {
-      window.removeEventListener("unhandledrejection", handleError)
-    }
-  }, [])
+  }, [tonConnectUI, connected])
 
   return {
     connected,

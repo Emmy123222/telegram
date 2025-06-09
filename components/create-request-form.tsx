@@ -100,8 +100,8 @@ export function CreateRequestForm({ address }: CreateRequestFormProps) {
   const handleShare = () => {
     if (!requestId) return
 
-    // Generate a shareable link using the Telegram bot
-    const shareUrl = `https://t.me/your_bot_username/app?startapp=request_${requestId}`
+    // Generate a shareable link
+    const shareUrl = `https://t.me/tgbtc_request_bot/app?startapp=request_${requestId}`
 
     // Use Telegram WebApp to share if available
     if (window.Telegram?.WebApp) {

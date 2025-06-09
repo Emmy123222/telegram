@@ -8,28 +8,22 @@ interface TonConnectProviderProps {
 }
 
 export function TonConnectProvider({ children }: TonConnectProviderProps) {
-  // Use inline manifest instead of URL to avoid 404 errors
-  const manifest = {
-    url: typeof window !== "undefined" ? window.location.origin : "https://tgbtc-mini-app.vercel.app",
-    name: "tgBTC Request & Pay",
-    iconUrl: "https://ton.org/download/ton_symbol.png",
-    termsOfUseUrl: "https://ton.org/terms",
-    privacyPolicyUrl: "https://ton.org/privacy",
-  }
+  // Use inline manifest configuration to avoid external URL dependency
+  const manifestUrl =
+    "https://raw.githubusercontent.com/ton-community/ton-connect-manifest/main/tonconnect-manifest.json"
 
   return (
     <TonConnectUIProvider
-      manifestUrl={undefined}
-      manifest={manifest}
+      manifestUrl={manifestUrl}
       actionsConfiguration={{
-        twaReturnUrl: "https://t.me/your_bot_name",
+        twaReturnUrl: "https://t.me/tgbtc_request_bot",
         skipRedirectToWallet: "never",
       }}
       uiPreferences={{
         theme: "LIGHT",
         borderRadius: "m",
         colorsSet: {
-          [THEME.LIGHT]: {
+          LIGHT: {
             connectButton: {
               background: "#0088cc",
               foreground: "#ffffff",
@@ -89,9 +83,9 @@ export function TonConnectProvider({ children }: TonConnectProviderProps) {
             name: "MyTonWallet",
             imageUrl: "https://static.mytonwallet.io/icon-256.png",
             aboutUrl: "https://mytonwallet.io",
-            universalLink: "https://connect.mytonwallet.org",
+            universalLink: "https://mytonwallet.io/ton-connect",
             jsBridgeKey: "mytonwallet",
-            bridgeUrl: "https://bridge.mytonwallet.org",
+            bridgeUrl: "https://bridge.tonapi.io/bridge",
             platforms: ["chrome", "windows", "macos", "linux"],
           },
         ],
@@ -101,9 +95,3 @@ export function TonConnectProvider({ children }: TonConnectProviderProps) {
     </TonConnectUIProvider>
   )
 }
-
-// Import THEME constant
-const THEME = {
-  LIGHT: "LIGHT",
-  DARK: "DARK",
-} as const
