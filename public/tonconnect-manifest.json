@@ -1,0 +1,7 @@
+{
+  "url": "http://localhost:3000",
+  "name": "tgBTC Request & Pay",
+  "iconUrl": "http://localhost:3000/icon-192x192.png",
+  "termsOfUseUrl": "http://localhost:3000/terms",
+  "privacyPolicyUrl": "http://localhost:3000/privacy"
+}
