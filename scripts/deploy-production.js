@@ -5,6 +5,15 @@ import { mnemonicToPrivateKey } from "@ton/crypto"
 import { createClient } from "@supabase/supabase-js"
 import { Address } from "@ton/core"
 
+// Get environment variables with fallbacks
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://wjjlhcaoblbvilfdxycp.supabase.co"
+
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqamxoY2FvYmxidmlsZmR4eWNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTQ0MjQsImV4cCI6MjA2NDY5MDQyNH0.K7mQX0Uf3MOa-9lX3IPnYjVBTTi_ToWxs5z8u0iHBuc"
+
 const DEPLOYMENT_CONFIG = {
   network: process.env.NODE_ENV === "production" ? "mainnet" : "testnet",
   tonEndpoint:
@@ -13,8 +22,8 @@ const DEPLOYMENT_CONFIG = {
       : "https://testnet.toncenter.com/api/v2/jsonRPC",
   tonApiKey: process.env.TON_API_KEY,
   deployerMnemonic: process.env.DEPLOYER_MNEMONIC?.split(" "),
-  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
-  supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  supabaseUrl: supabaseUrl,
+  supabaseKey: supabaseAnonKey,
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || "7669968875:AAF6vPRSg8kBHYWUIsgQAkY6FZJ-c6mZLR4",
   appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://tgbtc-mini-app.vercel.app",
 }
@@ -25,6 +34,7 @@ async function deployToProduction() {
   console.log(`🔗 TON Endpoint: ${DEPLOYMENT_CONFIG.tonEndpoint}`)
   console.log(`🤖 Bot Token: ${DEPLOYMENT_CONFIG.telegramBotToken.slice(0, 10)}...`)
   console.log(`🌐 App URL: ${DEPLOYMENT_CONFIG.appUrl}`)
+  console.log(`📊 Supabase URL: ${DEPLOYMENT_CONFIG.supabaseUrl}`)
 
   // Initialize clients
   const tonClient = new TonClient({

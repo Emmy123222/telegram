@@ -1,10 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { TonClient, WalletContractV4, internal } from "@ton/ton"
 import { mnemonicToPrivateKey } from "@ton/crypto"
-import { createClient } from "@supabase/supabase-js"
 import { Address } from "@ton/core"
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+import { supabaseAdmin as supabase } from "@/lib/supabase"
 
 const tonClient = new TonClient({
   endpoint: process.env.TON_ENDPOINT || "https://testnet.toncenter.com/api/v2/jsonRPC",

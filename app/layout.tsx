@@ -3,11 +3,12 @@ import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 import { TonConnectProvider } from "@/components/ton-connect-provider"
 import { Toaster } from "@/components/ui/toaster"
+import { SupabaseProvider } from "@/components/supabase-provider"
 
 export const metadata = {
   title: "tgBTC Request & Pay",
   description: "Request and send Bitcoin on Telegram",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -22,10 +23,12 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="light">
-          <TonConnectProvider>
-            {children}
-            <Toaster />
-          </TonConnectProvider>
+          <SupabaseProvider>
+            <TonConnectProvider>
+              {children}
+              <Toaster />
+            </TonConnectProvider>
+          </SupabaseProvider>
         </ThemeProvider>
       </body>
     </html>

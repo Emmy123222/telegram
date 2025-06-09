@@ -1,13 +1,23 @@
 // Setup script for Telegram bot configuration
 
+// Get environment variables with fallbacks
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.VITE_SUPABASE_URL || "https://wjjlhcaoblbvilfdxycp.supabase.co"
+
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqamxoY2FvYmxidmlsZmR4eWNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkxMTQ0MjQsImV4cCI6MjA2NDY5MDQyNH0.K7mQX0Uf3MOa-9lX3IPnYjVBTTi_ToWxs5z8u0iHBuc"
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7669968875:AAF6vPRSg8kBHYWUIsgQAkY6FZJ-c6mZLR4"
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`
-const WEBHOOK_URL = `${process.env.NEXT_PUBLIC_APP_URL}/api/telegram/webhook`
+const WEBHOOK_URL = `${process.env.NEXT_PUBLIC_APP_URL || "https://tgbtc-mini-app.vercel.app"}/api/telegram/webhook`
 
 async function setupTelegramBot() {
   console.log("🤖 Setting up Telegram bot...")
   console.log(`📡 Bot Token: ${TELEGRAM_BOT_TOKEN.slice(0, 10)}...`)
   console.log(`🔗 Webhook URL: ${WEBHOOK_URL}`)
+  console.log(`📊 Supabase URL: ${supabaseUrl}`)
 
   try {
     // 1. Set bot commands
