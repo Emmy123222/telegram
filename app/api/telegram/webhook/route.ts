@@ -1,8 +1,20 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { ENV } from "@/lib/env"
 import { supabaseAdmin as supabase } from "@/lib/supabase"
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "7669968875:AAF6vPRSg8kBHYWUIsgQAkY6FZJ-c6mZLR4"
+// Ensure environment variables are available
+const TELEGRAM_BOT_TOKEN = ENV.TELEGRAM_BOT_TOKEN
 const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}`
+const APP_URL = ENV.APP_URL
+
+// Validate required environment variables
+if (!TELEGRAM_BOT_TOKEN) {
+  throw new Error("TELEGRAM_BOT_TOKEN is required")
+}
+
+if (!APP_URL) {
+  throw new Error("APP_URL is required")
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -100,7 +112,7 @@ async function handleInlineQuery(inlineQuery: any) {
                   {
                     text: `Pay ${request.amount} tgBTC`,
                     web_app: {
-                      url: `${process.env.NEXT_PUBLIC_APP_URL}?requestId=${requestId}`,
+                      url: `${APP_URL}?requestId=${requestId}`,
                     },
                   },
                 ],
@@ -167,7 +179,7 @@ Tap the button below to get started:`
           {
             text: "🚀 Open tgBTC App",
             web_app: {
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://tgbtc-mini-app.vercel.app",
+              url: APP_URL,
             },
           },
         ],
@@ -253,7 +265,7 @@ Tap the button below to pay:`
             {
               text: `Pay ${request.amount} tgBTC`,
               web_app: {
-                url: `${process.env.NEXT_PUBLIC_APP_URL}?requestId=${requestId}`,
+                url: `${APP_URL}?requestId=${requestId}`,
               },
             },
           ],
