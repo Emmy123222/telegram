@@ -16,8 +16,8 @@ export function RequestItem({ request, type }: RequestItemProps) {
   const { toast } = useToast()
 
   const handleShare = () => {
-    // Generate a shareable link
-    const shareUrl = `https://t.me/tgbtc_request_bot/app?startapp=request_${request.id}`
+    // Generate a shareable link using the Telegram bot
+    const shareUrl = `https://t.me/your_bot_username/app?startapp=request_${request.id}`
 
     // Use Telegram WebApp to share if available
     if (window.Telegram?.WebApp) {

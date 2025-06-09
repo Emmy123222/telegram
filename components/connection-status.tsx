@@ -20,11 +20,11 @@ export function ConnectionStatus() {
   if (connected && address) {
     return (
       <div className="flex items-center gap-2">
-        <Badge variant="default" className="flex items-center gap-1 bg-green-100 text-green-800">
+        <Badge variant="default" className="flex items-center gap-1 bg-green-100 text-green-800 border-green-200">
           <Wifi className="h-3 w-3" />
           Connected
         </Badge>
-        <Button variant="ghost" size="sm" onClick={disconnect} className="text-xs">
+        <Button variant="ghost" size="sm" onClick={disconnect} className="text-xs h-6 px-2">
           Disconnect
         </Button>
       </div>
@@ -32,7 +32,7 @@ export function ConnectionStatus() {
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={connect} className="text-xs">
+    <Button variant="outline" size="sm" onClick={connect} className="text-xs h-6 px-2">
       <WifiOff className="h-3 w-3 mr-1" />
       Connect
     </Button>

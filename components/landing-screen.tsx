@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useTonConnect } from "@/hooks/use-ton-connect"
-import { Bitcoin, ArrowRightLeft, Clock, Shield, Loader2 } from "lucide-react"
+import { Bitcoin, ArrowRightLeft, Clock, Shield, Loader2, AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export function LandingScreen() {
@@ -47,8 +47,9 @@ export function LandingScreen() {
             </div>
           </div>
 
-          {connectionError && (
+          {connectionError && !connectionError.includes("manifest") && !connectionError.includes("404") && (
             <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
               <AlertDescription>{connectionError}</AlertDescription>
             </Alert>
           )}

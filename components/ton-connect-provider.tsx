@@ -8,21 +8,19 @@ interface TonConnectProviderProps {
 }
 
 export function TonConnectProvider({ children }: TonConnectProviderProps) {
-  // Create the manifest URL based on the current environment
-  const getManifestUrl = () => {
-    if (typeof window === "undefined") {
-      return "https://raw.githubusercontent.com/ton-community/ton-connect-manifest/main/tonconnect-manifest.json"
-    }
-
-    const baseUrl = window.location.origin
-    return `${baseUrl}/tonconnect-manifest.json`
+  // Use inline manifest instead of URL to avoid 404 errors
+  const manifest = {
+    url: typeof window !== "undefined" ? window.location.origin : "https://tgbtc-mini-app.vercel.app",
+    name: "tgBTC Request & Pay",
+    iconUrl: "https://ton.org/download/ton_symbol.png",
+    termsOfUseUrl: "https://ton.org/terms",
+    privacyPolicyUrl: "https://ton.org/privacy",
   }
-
-  const manifestUrl = getManifestUrl()
 
   return (
     <TonConnectUIProvider
-      manifestUrl={manifestUrl}
+      manifestUrl={undefined}
+      manifest={manifest}
       actionsConfiguration={{
         twaReturnUrl: "https://t.me/your_bot_name",
         skipRedirectToWallet: "never",
@@ -85,6 +83,16 @@ export function TonConnectProvider({ children }: TonConnectProviderProps) {
             jsBridgeKey: "tonkeeper",
             bridgeUrl: "https://bridge.tonapi.io/bridge",
             platforms: ["ios", "android", "chrome", "firefox"],
+          },
+          {
+            appName: "mytonwallet",
+            name: "MyTonWallet",
+            imageUrl: "https://static.mytonwallet.io/icon-256.png",
+            aboutUrl: "https://mytonwallet.io",
+            universalLink: "https://connect.mytonwallet.org",
+            jsBridgeKey: "mytonwallet",
+            bridgeUrl: "https://bridge.mytonwallet.org",
+            platforms: ["chrome", "windows", "macos", "linux"],
           },
         ],
       }}

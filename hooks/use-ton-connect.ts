@@ -22,6 +22,9 @@ export function useTonConnect() {
     setConnectionError(null)
 
     try {
+      // Clear any previous errors
+      setConnectionError(null)
+
       // Open the connection modal
       tonConnectUI.openModal()
     } catch (error: any) {
@@ -42,6 +45,7 @@ export function useTonConnect() {
     try {
       await tonConnectUI.disconnect()
       setConnectionError(null)
+      setIsConnecting(false)
       toast({
         title: "Wallet Disconnected",
         description: "Your wallet has been disconnected",
@@ -70,6 +74,7 @@ export function useTonConnect() {
         })
       } else {
         console.log("Wallet disconnected")
+        setConnectionError(null)
       }
     })
 
@@ -81,10 +86,11 @@ export function useTonConnect() {
   // Handle modal state changes
   useEffect(() => {
     const unsubscribe = tonConnectUI.onModalStateChange((state) => {
-      if (state.status === "closed" && !connected) {
+      if (state.status === "closed" && !connected && isConnecting) {
         setIsConnecting(false)
         if (state.closeReason === "user-action") {
-          setConnectionError("Connection cancelled by user")
+          // Don't show error for user cancellation
+          console.log("Connection cancelled by user")
         }
       }
     })
@@ -92,7 +98,35 @@ export function useTonConnect() {
     return () => {
       unsubscribe()
     }
-  }, [tonConnectUI, connected])
+  }, [tonConnectUI, connected, isConnecting])
+
+  // Handle connection errors
+  useEffect(() => {
+    const handleError = (error: any) => {
+      console.error("TON Connect error:", error)
+      setIsConnecting(false)
+
+      // Don't show manifest errors to users
+      if (error?.message?.includes("manifest") || error?.message?.includes("404")) {
+        console.warn("Manifest error (handled internally):", error)
+        return
+      }
+
+      setConnectionError(error?.message || "Connection failed")
+    }
+
+    // Listen for any unhandled errors
+    window.addEventListener("unhandledrejection", (event) => {
+      if (event.reason?.message?.includes("tonconnect") || event.reason?.message?.includes("manifest")) {
+        event.preventDefault() // Prevent console error
+        handleError(event.reason)
+      }
+    })
+
+    return () => {
+      window.removeEventListener("unhandledrejection", handleError)
+    }
+  }, [])
 
   return {
     connected,
